@@ -402,20 +402,10 @@ class GtkBurpKeygenApp {
         appendOutput("  └─ Expiration: $expiration")
 
         try {
-            val profile = LicenseProfile(
-                licenseName = "$name ($organization) <$email>",
-                licenseType = when (type) {
-                    "Professional" -> LicenseType.PROFESSIONAL
-                    "Enterprise" -> LicenseType.ENTERPRISE
-                    "Trial" -> LicenseType.TRIAL
-                    "Educational" -> LicenseType.EDUCATIONAL
-                    else -> LicenseType.PROFESSIONAL
-                },
-                customId = if (customId == "Auto-generate") null else customId
-            )
+            val licenseName = "$name ($organization) <$email>"
 
             appendOutput("Generating cryptographic signatures...")
-            val license = LicenseProfileManager.generateLicenseWithProfile(profile)
+            val license = generateLicense(licenseName)
             val configPath = writeConfigWithProfile(
                 license = license,
                 name = name,

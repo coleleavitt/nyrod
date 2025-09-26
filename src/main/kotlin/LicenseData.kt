@@ -46,49 +46,5 @@ data class LicenseData(
         }
     }
 
-    // Predefined license profiles
-    companion object {
-        fun getDefaultProfiles(): List<Pair<String, LicenseData>> {
-            return listOf(
-                "Corporate License" to LicenseData(
-                    licenseName = "Corporate User",
-                    licenseType = "license",
-                    licenseLevel = "enterprise",
-                    companyName = "Example Corp",
-                    email = "admin@example.com"
-                ),
-
-                "Personal License" to LicenseData(
-                    licenseName = "Personal User",
-                    licenseType = "license",
-                    licenseLevel = "professional",
-                    email = "user@example.com"
-                ),
-
-                "Research License" to LicenseData(
-                    licenseName = "Security Researcher",
-                    licenseType = "license",
-                    licenseLevel = "full",
-                    companyName = "Research Lab",
-                    features = mutableSetOf("scanner", "intruder", "repeater", "sequencer")
-                ),
-
-                "Trial License" to LicenseData(
-                    licenseName = "Trial User",
-                    licenseType = "trial",
-                    licenseLevel = "professional",
-                    expirationDate = LocalDate.now().plusDays(30),
-                    features = mutableSetOf("scanner", "repeater")
-                ),
-
-                "Penetration Tester" to LicenseData(
-                    licenseName = "Penetration Tester",
-                    licenseType = "license",
-                    licenseLevel = "professional",
-                    features = mutableSetOf("scanner", "intruder", "repeater", "sequencer", "decoder")
-                )
-            )
-        }
-    }
 }
 
