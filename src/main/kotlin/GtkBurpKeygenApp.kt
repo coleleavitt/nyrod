@@ -298,8 +298,7 @@ class GtkBurpKeygenApp {
         handleAutoRun()
 
         // Show window
-        @Suppress("DEPRECATION")
-        window.show()
+        window.present()
     }
 
     private fun loadConfigValues() {
@@ -459,15 +458,11 @@ class GtkBurpKeygenApp {
         appendOutput("Connecting to PortSwigger CDN...")
 
         // Create and show a simple progress dialog
-        @Suppress("DEPRECATION")
-        val progressDialog = Dialog()
+        val progressDialog = Window()
         progressDialog.setTitle(Str("Downloading Burp Suite"))
         progressDialog.setTransientFor(window)
         progressDialog.setModal(true)
         progressDialog.setDefaultSize(400, 150)
-
-        @Suppress("DEPRECATION")
-        val contentArea = progressDialog.getContentArea()
         val vbox = Box(Orientation.VERTICAL, 16)
         vbox.setMarginTop(20)
         vbox.setMarginBottom(20)
@@ -493,9 +488,8 @@ class GtkBurpKeygenApp {
         cancelButton.setMarginTop(12)
         vbox.append(cancelButton)
 
-        contentArea.append(vbox)
-        @Suppress("DEPRECATION")
-        progressDialog.show()
+        progressDialog.setChild(vbox)
+        progressDialog.present()
 
         // Create downloader instance outside the thread so we can cancel it
         val downloader = BurpSuiteDownloader()
@@ -1172,21 +1166,8 @@ class GtkBurpKeygenApp {
 
     private fun showDownloadInfoDialog() {
         // Create an info dialog showing current status
-        @Suppress("DEPRECATION")
-        val dialog = MessageDialog(
-            window,
-            DialogFlags.MODAL,
-            MessageType.INFO,
-            ButtonsType.OK,
-            Str("Burp Suite is already downloaded and up to date.\n\nVersion: v2025.9.3\nLocation: ~/.local/share/BurpSuite/\n\nClick 'Launch Burp Suite' to start the application.")
-        )
-
-        dialog.onResponse { _ ->
-            dialog.destroy()
-        }
-
-        @Suppress("DEPRECATION")
-        dialog.show()
+        val dialog = AlertDialog(Str("Burp Suite is already downloaded and up to date.\n\nVersion: v2025.9.3\nLocation: ~/.local/share/BurpSuite/\n\nClick 'Launch Burp Suite' to start the application."))
+        dialog.show(window)
     }
 
     private fun createDownloadProgressDialog(): Window {
