@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" styleClass="license-customization-panel" spacing="15">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+
+    <!-- License Profile Selection -->
+    <VBox spacing="8">
+        <Label text="🎯 License Profile" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="14"/>
+            </font>
+        </Label>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <ComboBox fx:id="profileComboBox" prefWidth="200" styleClass="profile-combo"
+                     promptText="Select profile..."/>
+            <Button fx:id="loadProfileButton" text="📂 Load" styleClass="action-button" prefWidth="80"/>
+            <Button fx:id="saveProfileButton" text="💾 Save" styleClass="action-button" prefWidth="80"/>
+            <Button fx:id="resetButton" text="🔄 Reset" styleClass="action-button" prefWidth="80"/>
+        </HBox>
+        <Label fx:id="profileDescriptionLabel" text="Custom license configuration"
+               styleClass="profile-description" wrapText="true"/>
+    </VBox>
+
+    <!-- License Details -->
+    <GridPane hgap="15" vgap="12" styleClass="license-form">
+        <columnConstraints>
+            <ColumnConstraints minWidth="120" prefWidth="120"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <!-- License Name -->
+        <Label text="👤 License Name:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="licenseNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                  styleClass="custom-field" promptText="Enter license holder name..."/>
+
+        <!-- License Type -->
+        <Label text="📄 License Type:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <ComboBox fx:id="licenseTypeCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                 styleClass="custom-field"/>
+
+        <!-- License Level -->
+        <Label text="⭐ License Level:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <ComboBox fx:id="licenseLevelCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                 styleClass="custom-field"/>
+
+        <!-- Expiration -->
+        <Label text="⏰ Expiration:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <CheckBox fx:id="neverExpiresCheckBox" text="Never expires" selected="true" styleClass="modern-checkbox"/>
+                <DatePicker fx:id="expirationDatePicker" disable="true" styleClass="custom-field" prefWidth="150"/>
+            </HBox>
+            <Label fx:id="expirationHelpLabel" text="Leave unchecked for licenses that never expire"
+                   styleClass="help-text"/>
+        </VBox>
+
+        <!-- Custom ID -->
+        <Label text="🆔 Custom ID:" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <CheckBox fx:id="autoGenerateIdCheckBox" text="Auto-generate" selected="true" styleClass="modern-checkbox"/>
+                <TextField fx:id="customIdField" disable="true" styleClass="custom-field" prefWidth="250"
+                          promptText="Enter 32-character ID or leave auto-generate checked"/>
+            </HBox>
+            <Label fx:id="customIdHelpLabel" text="Must be exactly 32 uppercase letters/numbers (A-Z, 0-9)"
+                   styleClass="help-text"/>
+        </VBox>
+    </GridPane>
+
+    <!-- Validation Messages -->
+    <Label fx:id="validationLabel" styleClass="validation-message" wrapText="true" visible="false"/>
+
+    <!-- Preview -->
+    <VBox spacing="8">
+        <Label text="👀 License Preview" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="14"/>
+            </font>
+        </Label>
+        <TextArea fx:id="licensePreviewArea" editable="false" prefRowCount="6" styleClass="preview-area"
+                 promptText="License preview will appear here..." wrapText="true"/>
+    </VBox>
+
+    <!-- Action Buttons -->
+    <HBox spacing="15" alignment="CENTER">
+        <Button fx:id="generateLicenseButton" text="🔑 Generate License" styleClass="generate-button"
+               prefWidth="160" prefHeight="40"/>
+        <Button fx:id="copyLicenseButton" text="📋 Copy to Clipboard" styleClass="action-button"
+               prefWidth="160" prefHeight="40" disable="true"/>
+        <Button fx:id="applyToMainButton" text="✅ Apply to Main UI" styleClass="apply-button"
+               prefWidth="160" prefHeight="40" disable="true"/>
+    </HBox>
+
+</VBox>

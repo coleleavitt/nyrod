@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<BorderPane xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BurpKeygenController" styleClass="root">
+
+    <!-- Top Header -->
+    <top>
+        <VBox styleClass="header-section" spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Title -->
+            <Label text="Burp Suite Pro Loader &amp; Keygen" styleClass="title-label">
+                <font>
+                    <Font name="System Bold" size="24"/>
+                </font>
+            </Label>
+
+            <!-- Controls row -->
+            <HBox spacing="30" alignment="CENTER_LEFT">
+                <CheckBox fx:id="autoRunCheckBox" text="Auto Run" styleClass="modern-checkbox"/>
+                <CheckBox fx:id="ignoreUpdateCheckBox" text="Ignore Updates" styleClass="modern-checkbox"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="themeButton" text="🔄 Auto Theme" styleClass="theme-button" prefWidth="180"/>
+                <Label fx:id="versionLabel" text="Checking latest version..." styleClass="version-label" wrapText="true"/>
+            </HBox>
+
+            <!-- Command section -->
+            <VBox spacing="8">
+                <Label text="Command Line" styleClass="section-title">
+                    <font>
+                        <Font name="System Bold" size="14"/>
+                    </font>
+                </Label>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <TextField fx:id="commandTextField" editable="false" HBox.hgrow="ALWAYS"
+                              styleClass="command-field" promptText="Java command will be generated here"/>
+                    <Button fx:id="runButton" text="▶ Run" prefWidth="100" styleClass="run-button"/>
+                </HBox>
+            </VBox>
+
+            <!-- License Configuration -->
+            <VBox spacing="8">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="License Configuration" styleClass="section-title">
+                        <font>
+                            <Font name="System Bold" size="14"/>
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="expandLicenseButton" text="⚙️ Advanced" styleClass="expand-button" prefWidth="110"/>
+                </HBox>
+
+                <!-- Basic License Fields (Always Visible) -->
+                <GridPane hgap="15" vgap="8">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="NEVER" minWidth="110" prefWidth="110" maxWidth="110"/>
+                        <ColumnConstraints hgrow="NEVER" minWidth="320" prefWidth="320" maxWidth="320"/>
+                        <ColumnConstraints hgrow="NEVER" minWidth="120" prefWidth="120" maxWidth="120"/>
+                        <ColumnConstraints hgrow="NEVER" minWidth="180" prefWidth="180" maxWidth="180"/>
+                    </columnConstraints>
+
+                    <Label text="License Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="licenseNameField" text="Licensed to John Doe"
+                              GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="input-field"/>
+
+                    <Label text="License Type:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="licenseTypeCombo" GridPane.columnIndex="3" GridPane.rowIndex="0"
+                             prefWidth="140" styleClass="combo-field"/>
+                </GridPane>
+
+                <!-- Advanced License Fields (Collapsible) -->
+                <VBox fx:id="advancedLicensePanel" spacing="8" managed="false" visible="false">
+                    <GridPane hgap="15" vgap="8">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="110" prefWidth="110" maxWidth="110"/>
+                            <ColumnConstraints hgrow="NEVER" minWidth="320" prefWidth="320" maxWidth="320"/>
+                            <ColumnConstraints hgrow="NEVER" minWidth="120" prefWidth="120" maxWidth="120"/>
+                            <ColumnConstraints hgrow="NEVER" minWidth="180" prefWidth="180" maxWidth="180"/>
+                        </columnConstraints>
+
+
+                        <Label text="Company:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="companyNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                  styleClass="input-field" promptText="Optional company name"/>
+
+                        <Label text="Email:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                        <TextField fx:id="emailField" GridPane.columnIndex="3" GridPane.rowIndex="0"
+                                  styleClass="input-field" promptText="Optional email"/>
+
+                        <Label text="Expiration:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <DatePicker fx:id="expirationPicker" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                   prefWidth="140" styleClass="date-field"/>
+
+                        <Label text="License ID:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                        <TextField fx:id="licenseIdField" GridPane.columnIndex="3" GridPane.rowIndex="1"
+                                  styleClass="input-field" promptText="Auto-generated if empty"/>
+                    </GridPane>
+
+
+                    <!-- Notes -->
+                    <VBox spacing="5">
+                        <Label text="Notes:" styleClass="section-title">
+                            <font>
+                                <Font name="System Bold" size="12"/>
+                            </font>
+                        </Label>
+                        <TextArea fx:id="notesArea" prefRowCount="2" styleClass="notes-area"
+                                 promptText="Optional notes about this license..."/>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </VBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <VBox spacing="15" styleClass="content-section">
+            <padding>
+                <Insets right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Top row with License and Request -->
+            <HBox spacing="15" VBox.vgrow="ALWAYS">
+                <!-- License Key Panel -->
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="🗝️ Generated License" styleClass="panel-title">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                    </Label>
+                    <TextArea fx:id="licenseTextArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
+                             styleClass="license-area" promptText="Your license key will appear here..."/>
+                </VBox>
+
+                <!-- Activation Request Panel -->
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="📤 Activation Request" styleClass="panel-title">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                    </Label>
+                    <TextArea fx:id="activationRequestTextArea" wrapText="true" VBox.vgrow="ALWAYS"
+                             styleClass="request-area" promptText="Paste activation request from Burp Suite here..."/>
+                </VBox>
+            </HBox>
+
+            <!-- Activation Response Panel -->
+            <VBox spacing="8" VBox.vgrow="ALWAYS">
+                <Label text="📥 Activation Response" styleClass="panel-title">
+                    <font>
+                        <Font name="System Bold" size="16"/>
+                    </font>
+                </Label>
+                <TextArea fx:id="activationResponseTextArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
+                         styleClass="response-area" promptText="Generated activation response will appear here..."/>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>
