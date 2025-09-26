@@ -18,32 +18,6 @@ enum class LicenseType(val value: String, val displayName: String) {
 
 object LicenseProfileManager {
 
-    private val predefinedProfiles = mapOf(
-        "Professional" to LicenseProfile(
-            licenseName = "Licensed to John Doe",
-            licenseType = LicenseType.PROFESSIONAL,
-            profileName = "Professional"
-        ),
-        "Enterprise" to LicenseProfile(
-            licenseName = "Licensed to John Doe",
-            licenseType = LicenseType.ENTERPRISE,
-            profileName = "Enterprise"
-        ),
-        "Trial" to LicenseProfile(
-            licenseName = "Licensed to John Doe",
-            licenseType = LicenseType.TRIAL,
-            expirationDate = LocalDateTime.now().plusDays(30),
-            profileName = "Trial"
-        ),
-        "Educational" to LicenseProfile(
-            licenseName = "Licensed to John Doe",
-            licenseType = LicenseType.EDUCATIONAL,
-            profileName = "Educational"
-        )
-    )
-
-    fun getPredefinedProfiles(): Map<String, LicenseProfile> = predefinedProfiles
-
     fun createDefaultProfile(): LicenseProfile = LicenseProfile()
 
     fun generateLicenseWithProfile(profile: LicenseProfile): String {
