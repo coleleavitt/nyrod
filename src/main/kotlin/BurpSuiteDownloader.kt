@@ -1,11 +1,8 @@
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URI
-import java.nio.file.Files
 import java.security.MessageDigest
-import kotlin.concurrent.thread
 
 data class DownloadResult(
     val success: Boolean,
