@@ -34,3 +34,7 @@ This is the suggested way to use Gradle in production projects.
 
 This project uses a version catalog (see `gradle/libs.versions.toml`) to declare and version dependencies
 and both a build cache and a configuration cache (see `gradle.properties`).
+
+## VirusTotal & Hybrid Analysis
+https://www.virustotal.com/gui/file/2acfab7963aa82a0cbcf811b6e0990fce3ab446e5f977f4253b73ba791e96be1?nocache=1
+http://hybrid-analysis.com/sample/2acfab7963aa82a0cbcf811b6e0990fce3ab446e5f977f4253b73ba791e96be1
