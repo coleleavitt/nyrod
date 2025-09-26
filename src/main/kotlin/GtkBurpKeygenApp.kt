@@ -1,13 +1,11 @@
 import ch.bailu.gtk.gio.ApplicationFlags
-import ch.bailu.gtk.gtk.*
-import ch.bailu.gtk.glib.DateTime
 import ch.bailu.gtk.glib.Glib
+import ch.bailu.gtk.gtk.*
 import ch.bailu.gtk.type.Str
 import ch.bailu.gtk.type.Strs
 import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
@@ -19,7 +17,7 @@ class GtkBurpKeygenApp {
 
     // UI Components
     private lateinit var licenseNameEntry: Entry
-    private lateinit var licenseTypeCombo: ComboBoxText
+    private lateinit var licenseTypeCombo: DropDown
     private lateinit var expirationCalendar: Calendar
     private lateinit var expirationEntry: Entry
     private lateinit var customIdEntry: Entry
@@ -97,15 +95,17 @@ class GtkBurpKeygenApp {
         val typeLabel = Label(Str("License Type:"))
         typeLabel.setHalign(Align.START)
         typeLabel.setSizeRequest(150, -1)
-        licenseTypeCombo = ComboBoxText()
-        licenseTypeCombo.appendText(Str("Professional"))
-        licenseTypeCombo.appendText(Str("Enterprise"))
-        licenseTypeCombo.appendText(Str("Trial"))
-        licenseTypeCombo.appendText(Str("Educational"))
-        licenseTypeCombo.setActive(0)
+        // Create StringList with license types
+        val licenseTypes = StringList(null as ch.bailu.gtk.type.Strs?)
+        licenseTypes.append(Str("Professional"))
+        licenseTypes.append(Str("Enterprise"))
+        licenseTypes.append(Str("Trial"))
+        licenseTypes.append(Str("Educational"))
+        licenseTypeCombo = DropDown(licenseTypes.asListModel(), null)
+        licenseTypeCombo.setSelected(0)
         licenseTypeCombo.setHexpand(true)
-        // Auto-generate license when type changes
-        licenseTypeCombo.onChanged { generateLicense() }
+        // Note: DropDown doesn't have simple change callbacks like ComboBoxText
+        // License will be generated when user interaction triggers it
         typeBox.append(typeLabel)
         typeBox.append(licenseTypeCombo)
         profileBox.append(typeBox)
@@ -189,6 +189,20 @@ class GtkBurpKeygenApp {
 
         profileFrame.setChild(profileBox)
         mainBox.append(profileFrame)
+
+        // Add Generate License button
+        val generateButtonBox = Box(Orientation.HORIZONTAL, 8)
+        generateButtonBox.setHalign(Align.CENTER)
+        generateButtonBox.setMarginTop(8)
+        generateButtonBox.setMarginBottom(8)
+
+        val generateButton = Button()
+        generateButton.setLabel(Str("Generate License"))
+        generateButton.addCssClass(Str("suggested-action"))
+        generateButton.onClicked { generateLicense() }
+
+        generateButtonBox.append(generateButton)
+        mainBox.append(generateButtonBox)
 
         // Create launch configuration section
         val launchConfigFrame = Frame(Str("Launch Configuration"))
@@ -284,6 +298,7 @@ class GtkBurpKeygenApp {
         handleAutoRun()
 
         // Show window
+        @Suppress("DEPRECATION")
         window.show()
     }
 
@@ -325,10 +340,11 @@ class GtkBurpKeygenApp {
 
             configProperties["license_type"]?.let { type ->
                 when (type.uppercase()) {
-                    "PROFESSIONAL" -> licenseTypeCombo.setActive(0)
-                    "ENTERPRISE" -> licenseTypeCombo.setActive(1)
-                    "TRIAL" -> licenseTypeCombo.setActive(2)
-                    "EDUCATIONAL" -> licenseTypeCombo.setActive(3)
+                    "PROFESSIONAL" -> licenseTypeCombo.setSelected(0)
+                    "ENTERPRISE" -> licenseTypeCombo.setSelected(1)
+                    "TRIAL" -> licenseTypeCombo.setSelected(2)
+                    "EDUCATIONAL" -> licenseTypeCombo.setSelected(3)
+                    else -> licenseTypeCombo.setSelected(0)
                 }
             }
 
@@ -385,7 +401,14 @@ class GtkBurpKeygenApp {
 
         // Read all profile information
         val name = licenseNameEntry.getBuffer().getText().toString()
-        val type = licenseTypeCombo.getActiveText().toString()
+        val selectedIndex = licenseTypeCombo.getSelected()
+        val type = when (selectedIndex) {
+            0 -> "Professional"
+            1 -> "Enterprise"
+            2 -> "Trial"
+            3 -> "Educational"
+            else -> "Professional"
+        }
         val organization = organizationEntry.getBuffer().getText().toString()
         val email = emailEntry.getBuffer().getText().toString()
         val customId = customIdEntry.getBuffer().getText().toString()
@@ -436,12 +459,14 @@ class GtkBurpKeygenApp {
         appendOutput("Connecting to PortSwigger CDN...")
 
         // Create and show a simple progress dialog
+        @Suppress("DEPRECATION")
         val progressDialog = Dialog()
         progressDialog.setTitle(Str("Downloading Burp Suite"))
         progressDialog.setTransientFor(window)
         progressDialog.setModal(true)
         progressDialog.setDefaultSize(400, 150)
 
+        @Suppress("DEPRECATION")
         val contentArea = progressDialog.getContentArea()
         val vbox = Box(Orientation.VERTICAL, 16)
         vbox.setMarginTop(20)
@@ -469,6 +494,7 @@ class GtkBurpKeygenApp {
         vbox.append(cancelButton)
 
         contentArea.append(vbox)
+        @Suppress("DEPRECATION")
         progressDialog.show()
 
         // Create downloader instance outside the thread so we can cancel it
@@ -1146,6 +1172,7 @@ class GtkBurpKeygenApp {
 
     private fun showDownloadInfoDialog() {
         // Create an info dialog showing current status
+        @Suppress("DEPRECATION")
         val dialog = MessageDialog(
             window,
             DialogFlags.MODAL,
@@ -1154,10 +1181,11 @@ class GtkBurpKeygenApp {
             Str("Burp Suite is already downloaded and up to date.\n\nVersion: v2025.9.3\nLocation: ~/.local/share/BurpSuite/\n\nClick 'Launch Burp Suite' to start the application.")
         )
 
-        dialog.onResponse { response ->
+        dialog.onResponse { _ ->
             dialog.destroy()
         }
 
+        @Suppress("DEPRECATION")
         dialog.show()
     }
 

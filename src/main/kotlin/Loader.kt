@@ -159,7 +159,7 @@ class Loader : ClassFileTransformer {
     }
 }
 
-fun premain(agentArgs: String?, inst: java.lang.instrument.Instrumentation) {
+fun premain(@Suppress("UNUSED_PARAMETER") agentArgs: String?, inst: java.lang.instrument.Instrumentation) {
     info("Burp Suite Loader agent starting...")
     inst.addTransformer(Loader())
     info("Burp Suite Loader agent loaded successfully")
