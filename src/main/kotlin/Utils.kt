@@ -284,7 +284,7 @@ fun getCMD(): Array<String> {
 }
 
 private fun getKeygenPath(): String {
-    val keygenFile = File(BurpKeygenApp::class.java.protectionDomain.codeSource.location.path)
+    val keygenFile = File(GtkBurpKeygenApp::class.java.protectionDomain.codeSource.location.path)
     val keygenFilePath = URLDecoder.decode(keygenFile.absolutePath, "UTF-8")
 
     // If running from classes directory (development), look for the JAR file
@@ -321,16 +321,52 @@ private fun getJavaVersion(path: String): Int {
     }
 }
 
+fun writeConfig(license: String): String {
+    val configFile = File(".config.ini")
+    val config = """
+        # Burp Suite Configuration
+        license=$license
+        version=2025.9.3
+        generated=${System.currentTimeMillis()}
+    """.trimIndent()
+
+    configFile.writeText(config)
+    return configFile.absolutePath
+}
+
+fun writeConfigWithProfile(license: String, name: String, organization: String, email: String, licenseType: String, expiration: String, customId: String): String {
+    val configFile = File(".config.ini")
+
+    val config = """
+        # Burp Suite Configuration
+        license=$license
+        version=2025.9.3
+        generated=${System.currentTimeMillis()}
+
+        # License Profile Information
+        license_name=$name
+        company_name=$organization
+        email=$email
+        license_type=$licenseType
+        expiration_date=$expiration
+        license_id=$customId
+    """.trimIndent()
+
+    configFile.writeText(config)
+    return configFile.absolutePath
+}
+
 private fun getBurpPath(): String {
     return try {
-        // First, try to find the installed Burp Suite from DownloadManager
-        val installedPath = DownloadManager.getBurpSuiteJarPath()
-        if (installedPath != null && Files.exists(installedPath)) {
-            return installedPath.toString()
+        // First, try to find the installed Burp Suite in the standard location
+        val burpSuiteDir = File(System.getProperty("user.home"), ".local/share/BurpSuite")
+        val installedJar = File(burpSuiteDir, "burpsuite_pro_v2025.9.3.jar")
+        if (installedJar.exists()) {
+            return installedJar.absolutePath
         }
 
         // Fallback to the current directory for backwards compatibility
-        val f = File(BurpKeygenApp::class.java.protectionDomain.codeSource.location.toURI().path)
+        val f = File(GtkBurpKeygenApp::class.java.protectionDomain.codeSource.location.toURI())
         val currentDir = if (f.isDirectory) f.path else f.parent
         val dirStream = Files.newDirectoryStream(Paths.get(currentDir), "burpsuite_*.jar")
 
@@ -345,7 +381,7 @@ private fun getBurpPath(): String {
 fun getCMDStr(cmd: Array<String>): String = cmd.joinToString(" ") { if (it.contains(" ")) "\"$it\"" else it }
 
 private fun getJavaPath(): String? {
-    val keygenFile = File(BurpKeygenApp::class.java.protectionDomain.codeSource.location.path)
+    val keygenFile = File(GtkBurpKeygenApp::class.java.protectionDomain.codeSource.location.path)
     val parent = keygenFile.parent
     val paths = listOf(
         "$parent/bin", "$parent/jre/bin", "$parent/jdk/bin",

@@ -158,3 +158,9 @@ class Loader : ClassFileTransformer {
         return writer.toByteArray()
     }
 }
+
+fun premain(agentArgs: String?, inst: java.lang.instrument.Instrumentation) {
+    info("Burp Suite Loader agent starting...")
+    inst.addTransformer(Loader())
+    info("Burp Suite Loader agent loaded successfully")
+}

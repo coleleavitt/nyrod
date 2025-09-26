@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.22"
-    id("org.openjfx.javafxplugin") version "0.1.0"
+    kotlin("plugin.serialization") version "1.9.22"
     application
 }
 
@@ -9,12 +9,7 @@ version = "1.0.0"
 
 repositories {
     mavenCentral()
-}
-
-// Configure JavaFX modules
-javafx {
-    version = "21.0.1"
-    modules = listOf("javafx.controls", "javafx.fxml", "javafx.web")
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -22,14 +17,18 @@ dependencies {
     implementation("org.ow2.asm:asm:9.6")
     implementation("org.ow2.asm:asm-tree:9.6")
 
-    // JavaFX dependencies are handled by the plugin
-    // But we can add additional ones if needed
-    implementation("org.controlsfx:controlsfx:11.1.2") // Additional controls
+    // java-gtk for native GTK 4 Wayland support
+    implementation("com.github.bailuk:java-gtk:0.6.1")
+
+    // Kotlin serialization for JSON parsing
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
 
 application {
-    mainClass.set("BurpKeygenAppKt")
+    mainClass.set("GtkBurpKeygenAppKt")
 }
+
+
 
 // --- CRITICAL CONFIGURATION FOR THE JAVA AGENT ---
 // This ensures the final JAR is a valid agent
@@ -58,21 +57,27 @@ tasks.register<Jar>("fatJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-// Configure JVM arguments for Wayland support
+// GTK 4 native Wayland support configuration
 tasks.withType<JavaExec> {
-    // Enable Wayland support
-    systemProperty("prism.order", "sw,d3d")  // Software rendering fallback
-    systemProperty("javafx.platform", "monocle")  // Enable headless support if needed
+    // Native Wayland environment
+    environment("GDK_BACKEND", "wayland")
+    environment("WAYLAND_DISPLAY", "wayland-1")
+    environment("XDG_SESSION_TYPE", "wayland")
 
-    // For better Wayland performance
+    // GTK 4 Wayland-specific configuration
+    systemProperty("java.awt.headless", "false")
+
+    // JVM arguments for JNA and native access
     jvmArgs = listOf(
-        "--add-exports=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED",
-        "--add-opens=java.desktop/sun.awt=ALL-UNNAMED",
-        "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED"
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED"
     )
 }
 
-// Run task configuration
-tasks.named<JavaExec>("run") {
-    dependsOn(tasks.classes)
+// Make run task depend on fatJar to ensure it's built
+tasks.named("run") {
+    dependsOn("fatJar")
 }
+
+// Remove duplicate run task configuration since Compose Desktop handles it

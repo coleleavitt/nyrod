@@ -18,25 +18,25 @@ echo "=== Burp Suite Launcher ==="
 
 # Verify Java installation
 if ! command -v java &> /dev/null; then
-    echo "❌ Error: Java not found in PATH. Please install OpenJDK 21+."
+    echo "Error: Java not found in PATH. Please install OpenJDK 21+."
     exit 1
 fi
 
 # Check if loader exists, build if needed
 if [ ! -f "$BURP_LOADER" ]; then
-    echo "🔧 Building burploader-fat.jar..."
+    echo "Building burploader-fat.jar..."
     cd "$PROJECT_DIR"
     ./gradlew shadowJar
     if [ ! -f "$BURP_LOADER" ]; then
-        echo "❌ Error: Failed to build burploader-fat.jar"
+        echo "Error: Failed to build burploader-fat.jar"
         exit 1
     fi
 fi
 
 # Check if Burp Suite JAR exists
 if [ ! -f "$BURP_JAR" ]; then
-    echo "❌ Error: Burp Suite JAR not found at: $BURP_JAR"
-    echo "💡 Run the keygen first to download Burp Suite"
+    echo "Error: Burp Suite JAR not found at: $BURP_JAR"
+    echo "Run the keygen first to download Burp Suite"
     cd "$PROJECT_DIR"
     ./gradlew run
     exit 1
@@ -45,18 +45,18 @@ fi
 # XWayland satellite support
 XWAYLAND_PID=""
 if command -v "$XWAYLAND_BIN" &> /dev/null; then
-    echo "🚀 Starting XWayland-satellite..."
+    echo "Starting XWayland-satellite..."
     "$XWAYLAND_BIN" &
     XWAYLAND_PID=$!
     sleep 3  # Give XWayland time to initialize
 
     # Cleanup on exit
     trap 'if [ -n "$XWAYLAND_PID" ] && kill -0 "$XWAYLAND_PID" 2>/dev/null; then
-              echo "🛑 Stopping XWayland-satellite (PID $XWAYLAND_PID)"
+              echo "Stopping XWayland-satellite (PID $XWAYLAND_PID)"
               kill "$XWAYLAND_PID"
           fi' EXIT INT TERM
 else
-    echo "⚠️  XWayland-satellite not found, using native display"
+    echo "XWayland-satellite not found, using native display"
 fi
 
 # XWayland-satellite optimized environment
@@ -65,11 +65,11 @@ export DISPLAY=:1
 export GDK_BACKEND=x11
 export QT_QPA_PLATFORM=xcb
 
-echo "📦 Loader: $(basename "$BURP_LOADER")"
-echo "🎯 Target: $(basename "$BURP_JAR")"
-echo "🖥️  Display: $DISPLAY"
+echo "Loader: $(basename "$BURP_LOADER")"
+echo "Target: $(basename "$BURP_JAR")"
+echo "Display: $DISPLAY"
 echo ""
-echo "🚀 Launching Burp Suite..."
+echo "Launching Burp Suite..."
 
 # Launch Burp Suite with optimized flags
 exec java \
